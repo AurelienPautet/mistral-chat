@@ -4,10 +4,11 @@ import React from "react";
 import { StepCard } from "@/components/StepCard";
 import { Step1Content } from "@/components/steps/Step1Content";
 import { AppState } from "@/types";
+import { Step2Content } from "@/components/steps/Step2Content";
 
 const Steps = [
   { name: "Import Content", component: Step1Content },
-  { name: "Select Sections", component: null },
+  { name: "Select Sections", component: Step2Content },
   { name: "Generate README", component: null },
 ];
 
@@ -21,13 +22,17 @@ export default function Page() {
     finalMarkdown: null,
   });
 
+  const CurrentComponent = Steps[appState.currentStep - 1].component;
+
   return (
     <StepCard
       name={Steps[appState.currentStep - 1].name}
       step={appState.currentStep}
       totalSteps={Steps.length}
     >
-      <Step1Content appState={appState} setAppState={setAppState} />
+      {CurrentComponent && (
+        <CurrentComponent appState={appState} setAppState={setAppState} />
+      )}
     </StepCard>
   );
 }
