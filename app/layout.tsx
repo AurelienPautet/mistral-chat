@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
+import QueryProvider from "@/components/providers/QueryProvider";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -31,7 +32,7 @@ export default function RootLayout({
       >
         <h1 className="text-5xl font-bold my-5">README generator</h1>
 
-        {children}
+        <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
   );
