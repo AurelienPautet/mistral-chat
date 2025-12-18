@@ -20,7 +20,7 @@ function StepCard({
   return (
     <Card
       data-slot="step-card"
-      className={cn("h-1/2 w-1/2 flex flex-col p-8 mt-auto mb-auto", className)}
+      className={cn("h-2/3 w-1/2 flex flex-col p-8 mt-auto mb-auto", className)}
       {...props}
     >
       <h1 className="text-2xl font-bold">
