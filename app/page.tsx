@@ -6,11 +6,13 @@ import { Step1Content } from "@/components/steps/Step1Content";
 import { AppState } from "@/types";
 import { Step2Content } from "@/components/steps/Step2Content";
 import { Step3Content } from "@/components/steps/Step3Content";
+import { Step4Content } from "@/components/steps/Step4Content";
 
 const Steps = [
   { name: "Import Content", component: Step1Content },
   { name: "Select Sections", component: Step2Content },
-  { name: "Generate README", component: Step3Content },
+  { name: "Answer Questions", component: Step3Content },
+  { name: "Generate README", component: Step4Content },
 ];
 
 export default function Page() {
@@ -20,6 +22,7 @@ export default function Page() {
     reporBranch: "main",
     repoFiles: null,
     selectedSections: [],
+    questions: [],
     finalMarkdown: null,
   });
 

@@ -2,22 +2,52 @@
 
 import React from "react";
 import { Button } from "../ui/button";
-import { Clipboard, LoaderCircle } from "lucide-react";
+import { ArrowRight, LoaderCircle } from "lucide-react";
 import { StepContentProps } from "@/types";
-import { MarkdownPreview } from "../MdPreview";
-import { useGenerateReadme } from "@/hooks/useMistral";
+import { useGenerateQuestions } from "@/hooks/useMistral";
+import { Card } from "../ui/card";
+import { Field, FieldLabel } from "../ui/field";
+import { Input } from "../ui/input";
+
+const QuestionCard: React.FC<{
+  question: string;
+  answer: string | null;
+  onChange: (newAnswer: string) => void;
+}> = ({ question, answer, onChange }) => {
+  return (
+    <Card className="border p-4 rounded-md shadow-md mb-4 h-auto flex-shrink-0">
+      <Field>
+        <FieldLabel htmlFor={"question-" + question}>{question}</FieldLabel>
+        <Input
+          id={"question-" + question}
+          placeholder="Your answer here"
+          required
+          value={answer || ""}
+          onChange={(e) => onChange(e.target.value)}
+        />
+      </Field>
+    </Card>
+  );
+};
+
 const Step3Content: React.FC<StepContentProps> = ({
   appState,
   setAppState,
 }) => {
-  const { isLoading, isError } = useGenerateReadme(appState, setAppState);
+  const { isLoading, isError } = useGenerateQuestions(appState, setAppState);
+  const handleAnswerChange = (index: number, newAnswer: string) => {
+    const updatedQuestions = [...appState.questions];
+    updatedQuestions[index].answer = newAnswer;
+    setAppState((prev) => ({ ...prev, questions: updatedQuestions }));
+  };
+  console.log(appState.questions);
   return (
     <div className="h-full overflow-hidden flex flex-col mt-4  pt-8">
       <div className="flex h-full overflow-y-scroll flex-col pb-10 mb-4">
         {isLoading && (
-          <div className="flex flex-col justify-center items-center h-full">
+          <div className="flex flex-col justify-center items-center ">
             <LoaderCircle className="animate-spin mx-auto" />
-            <p>Generating README.md</p>
+            <p>Generating questions</p>
           </div>
         )}
         {isError && (
@@ -26,17 +56,22 @@ const Step3Content: React.FC<StepContentProps> = ({
             later.
           </p>
         )}
-        <MarkdownPreview content={appState.finalMarkdown || ""} />
+        {appState.questions.map((q, index) => (
+          <QuestionCard
+            key={index}
+            question={q.question}
+            answer={q.answer}
+            onChange={(newAnswer) => handleAnswerChange(index, newAnswer)}
+          />
+        ))}
       </div>
       <Button
-        disabled={!appState.finalMarkdown}
-        className="mt-auto mx-auto w-1/2 hover:bg-primary/80"
-        onClick={() => {
-          navigator.clipboard.writeText(appState.finalMarkdown || "");
-        }}
+        disabled={!appState.questions.some((q) => q.answer)}
+        className="mt-auto mx-auto w-1/2"
+        onClick={() => setAppState((prev) => ({ ...prev, currentStep: 4 }))}
       >
-        Copy to Clipboard
-        <Clipboard className="ml-2" />
+        Next
+        <ArrowRight className="ml-2" />
       </Button>
     </div>
   );

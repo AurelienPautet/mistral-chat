@@ -8,12 +8,18 @@ export interface Section {
   description: string;
 }
 
+export interface Question {
+  question: string;
+  answer: string | null;
+}
+
 export interface AppState {
-  currentStep: 1 | 2 | 3;
+  currentStep: 1 | 2 | 3 | 4;
   repoUrl: string;
   reporBranch: string;
   repoFiles: RepoFile[] | null;
   selectedSections: Section[];
+  questions: Question[];
   finalMarkdown: string | null;
 }
 

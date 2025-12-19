@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { generateReadme } from "@/lib/mistralSercice";
+import { generateQuestions } from "@/lib/mistralSercice";
 export async function POST(request: Request) {
   try {
     const { repoFiles, selectedSections } = await request.json();
@@ -22,10 +22,10 @@ export async function POST(request: Request) {
       );
     }
 
-    const markdown = await generateReadme(repoFiles, selectedSections);
-    return NextResponse.json(markdown);
+    const questions = await generateQuestions(repoFiles, selectedSections);
+    return NextResponse.json(questions);
   } catch (error: unknown) {
-    console.error("Error generating README markdown:", error);
+    console.error("Error generating questions:", error);
     return NextResponse.json(
       { error: (error as Error).message || "Internal Server Error" },
       { status: 500 }
