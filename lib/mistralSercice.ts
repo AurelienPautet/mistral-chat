@@ -1,7 +1,11 @@
 import { Mistral } from "@mistralai/mistralai";
 import { RepoFile, Section, Question } from "@/types";
-const apiKey = process.env.MISTRAL_API_KEY || "your_api_key";
-
+const apiKey = process.env.MISTRAL_API_KEY;
+if (!apiKey) {
+  throw new Error(
+    "MISTRAL_API_KEY is not defined in environment variables, the app cannot run without it."
+  );
+}
 const client = new Mistral({ apiKey: apiKey });
 
 async function generateQuestions(
